@@ -6,7 +6,13 @@ from random import randint
 WIDTH, HEIGHT = 1600, 900
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-
+def inscreen(rect: pg.Rect):
+    x, y = True, True
+    if 0 > rect.left or WIDTH < rect.right:
+        x = False
+    if 0 > rect.top or HEIGHT < rect.bottom:
+        y = False
+    return x, y
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -18,7 +24,7 @@ def main():
     bomb = pg.Surface((20, 20)) # 表示領域
     bomb.set_colorkey((0, 0, 0)) # 背景透過
     bomb_rct = pg.draw.circle(bomb, (255, 0, 0), (10, 10), 10) #円の描画
-    bomb_rct.center = randint(10, WIDTH-10), randint(10, HEIGHT-10)
+    bomb_rct.center = randint(0, WIDTH), randint(0, HEIGHT)
     clock = pg.time.Clock()
     tmr = 0
     keydict = {
@@ -41,11 +47,15 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
         kk_rct.move_ip(sum_mv)
-
-
+        if inscreen(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
         bomb_rct.move_ip(vx, vy)
-
+        x, y = inscreen(bomb_rct)
+        if not x:
+            vx *= -1
+        if not y:
+            vy *= -1
         screen.blit(bomb, bomb_rct)
         pg.display.update()
         tmr += 1
