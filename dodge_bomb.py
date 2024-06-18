@@ -2,6 +2,7 @@ import os
 import sys
 import pygame as pg
 from random import randint
+import time
 
 WIDTH, HEIGHT = 1600, 900
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -13,6 +14,22 @@ def inscreen(rect: pg.Rect):
     if 0 > rect.top or HEIGHT < rect.bottom:
         y = False
     return x, y
+
+
+# 課題3
+def gameover(screen):
+    go = pg.Surface((WIDTH, HEIGHT))
+    go_rct = pg.draw.rect(go, (0, 0, 0), (WIDTH, HEIGHT, 0, 0))
+    go.set_alpha(100)
+    go_rct.center = 0, 0
+    sad_kk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 2.0)
+    go_text = pg.font.Font(None, 80)
+    go_text_render = go_text.render("Game Over", True, (255, 255, 255))
+    screen.blit(go, go_rct)
+    screen.blit(sad_kk_img, (800, 600))
+    screen.blit(go_text_render, (800, 450))
+    pg.display.update()
+    time.sleep(5)
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -33,14 +50,32 @@ def main():
         pg.K_LEFT:(-5, 0), 
         pg.K_RIGHT:(5, 0)
         }
+    # 課題1
+    rotozoom = {
+        (-5, -5):-45,
+        (-5, 0):0,
+        (-5, 5):45,
+        (0, 5):90,
+        (5, 5):135,
+        (5, 0):180,
+        (5, -5):225,
+        (0, -5):270,
+        (5, -5):315
+        }
+    
+
+
     vx, vy = +5, +5
     while True:
         for event in pg.event.get():
-            if event.type == pg.QUIT: 
+            if event.type == pg.QUIT:
                 return
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bomb_rct):  # 衝突判定
+
+            #課題3
+            gameover(screen)
             return
 
         key_lst = pg.key.get_pressed()
