@@ -119,12 +119,13 @@ def main():
             vx *= -1
         if not y:
             vy *= -1
+
         bomb_rct.move_ip(vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)])
 
         bomb = bomb_img[min(tmr//500, 9)]
-        bomb_rct = bomb.get_rect()
+        # bomb_rct = bomb.get_rect()
 
-        print(bomb_rct.center,bomb_rct,bomb_rct.width, bomb_rct.height)
+        # print(bomb_rct.center,bomb_rct,bomb_rct.width, bomb_rct.height)
 
         
         screen.blit(bomb, bomb_rct)
