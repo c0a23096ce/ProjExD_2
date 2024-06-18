@@ -4,8 +4,10 @@ import pygame as pg
 from random import randint
 import time
 
+
 WIDTH, HEIGHT = 1600, 900
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 
 def inscreen(rect: pg.Rect):
     x, y = True, True
@@ -15,6 +17,7 @@ def inscreen(rect: pg.Rect):
     if 0 > rect.top or HEIGHT < rect.bottom:
         y = False
     return x, y
+
 
 # 課題2
 def circle_accs(r): #半径
@@ -28,6 +31,7 @@ def circle_accs(r): #半径
         imglist.append(img)
         # doublelist.append(pg.draw.circle(img, (255, 0, 0), (r*i, r*i), r*i))
     return (accs, imglist, doublelist)
+
 
 # 課題3
 def gameover(screen):
@@ -44,6 +48,7 @@ def gameover(screen):
     pg.display.update()
     time.sleep(5)
 
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -58,7 +63,6 @@ def main():
     # bomb_rct = pg.draw.circle(bomb, (255, 0, 0), (10, 10), 10) # = 
     bomb_rct = bomb.get_rect()
     bomb_rct.center = randint(0, WIDTH), randint(0, HEIGHT)
-
 
     clock = pg.time.Clock()
     tmr = 0
@@ -92,10 +96,10 @@ def main():
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bomb_rct):  # 衝突判定
-            pass
+            #pass
             #課題3
-            # gameover(screen)
-            # return
+            gameover(screen)
+            return
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -113,7 +117,6 @@ def main():
         #print(f"bomb_rct:{bomb_rct}")
         # print(f"surface:{bomb_img}")
 
-
         x, y = inscreen(bomb_rct)
         if not x:
             vx *= -1
@@ -124,9 +127,7 @@ def main():
 
         bomb = bomb_img[min(tmr//500, 9)]
         # bomb_rct = bomb.get_rect()
-
         # print(bomb_rct.center,bomb_rct,bomb_rct.width, bomb_rct.height)
-
         
         screen.blit(bomb, bomb_rct)
         pg.display.update()
